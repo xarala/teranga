@@ -1,0 +1,5 @@
+; $Id$
+core        = 7.x
+name        = Teranga
+package     = Xarala
+description = Teranga tracks visits in user profile pages

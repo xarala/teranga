@@ -2,3 +2,37 @@
 // $Id$
 
 
+/**
+ * @file
+ * Main module file for Teranga module
+ * 
+ */
+
+ 
+/**
+ * Implementation of hook_permission()
+ *  
+ */
+function teranga_permission()
+{
+	return  array
+	(
+		/**
+		 * Permission required to views the terangas
+		 */
+		'view terangas' => array
+		(
+			'title'=> t('view terangas in user pages'),
+			'description' => t('allows the user to view terangas in user profiles')
+		),
+		/**
+		 * Permission required to view terangas as a graphic with jquery
+		 * TODO: implement graphism in terangas
+		 */
+		'view terangas as graphics' => array
+		(
+			'title' => t('graphic view terangas in user pages'),
+			'description' => t('allows the user to view terangas in user profiles with nice jquery graphs')
+		)
+	);
+}

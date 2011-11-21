@@ -10,8 +10,8 @@
 
  
 /**
- * Implementation of hook_permission()
- *  
+ * Implements hook_permission()
+ *   
  */
 function teranga_permission()
 {
@@ -35,4 +35,87 @@ function teranga_permission()
 			'description' => t('allows the user to view terangas in user profiles with nice jquery graphs')
 		)
 	);
+	
+}
+
+
+
+/**
+ * Implements hook_user_view().
+ * 
+ */
+function teranga_user_view($account, $view_mode, $langcode) 
+{
+	
+  /**
+   * References the currently logged in user
+   */
+  global $user;
+  
+  /**
+   * Increment the number of times the profile has been viewed
+   * Only if not the current user's profile
+   * 
+   */ 
+   if ($user->uid != $account->uid) 
+   {
+  
+	  if (!empty($_SESSION['teranga'][$account->uid])) 
+	  {
+	       $_SESSION['teranga'][$account->uid]++; 
+	  }
+	  else
+	  {
+	 	   $_SESSION['teranga'][$account->uid] = 1;  
+	  }
+       
+   }
+   
+   /**
+    * Add content to the $account->content Array
+    * 
+    */
+   if (user_access('view terangas')) 
+   {
+   	   if (empty($_SESSION['teranga'][$account->uid])) 
+   	   {
+			$_SESSION['teranga'][$account->uid]++;  
+	   }
+	   
+   	   $content = theme('user_terangas', array($account));	
+   	   	
+	   $account->content['teranga'] = array
+	   (
+		   	'#type'   => 'user_profile_item',
+		   	'#title'  => t('Profile Hits'),
+		   	'#markup'  => $content,
+		   	'#weight' => 10
+	   );
+   }
+
+  
+}
+
+	
+/**
+ * Implements hook_theme()
+ *
+ */
+function teranga_theme($existing, $type, $theme, $path)
+{
+	return array
+	(
+		'user_terangas' => array( 'arguments' => array('account' => NULL ) )
+	);
+}
+
+/**
+ * Default implementation of theme_user_terangas
+ *
+ *  @param $account an array of attrs the first item being the account
+ * 
+ */
+function theme_user_terangas($account)
+{	
+	return t('You have viewed this profile %num times.', array('%num' => $_SESSION['teranga'][$account[0]->uid]));	
 }

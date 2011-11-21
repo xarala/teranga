@@ -1,5 +1,5 @@
 ; $Id$
 core        = 7.x
-name        = Teranga
-package     = Xarala
+name        = teranga
+package     = Xarala Web Studios
 description = Teranga tracks visits in user profile pages
